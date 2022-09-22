@@ -1,8 +1,7 @@
 const passport = require('passport')
 const spotifyStrategy = require('passport-spotify').Strategy
-const spotifyWebApi = require('spotify-web-api-js')
-const spotifyApi = new spotifyWebApi()
-const request = require('request')
+const axios = require('axios').default
+const qs = require('qs')
 
 const { User } = require('../models')
 
@@ -18,8 +17,6 @@ passport.use(new spotifyStrategy(
     const spotifyId = profile.id
     const name = profile.displayName
     const avatar = profile.photos[1]?.url
-
-    spotifyApi.setAccessToken(accessToken)
 
     User.findOne({
       where: { spotifyId }
@@ -42,7 +39,7 @@ passport.use(new spotifyStrategy(
           refreshToken
         })
       })
-      .then(user => done(null, user))
+      .then(user => done(null, user.toJSON()))
       .catch(err => done(err))
   }
 ))
@@ -51,42 +48,35 @@ passport.serializeUser((user, done) => {
   done(null, user.id)
 })
 
-passport.deserializeUser((id, done) => {
-  User.findByPk(id)
-    .then(user => {
-      // 若spotify的token超過期限(3600秒)，需更新
-      if (Date.now() - Date.parse(user.updatedAt) >= 3600) {
-        const requestOptions = {
-          url: 'https://accounts.spotify.com/api/token',
-          headers: {
-            'Authorization': 'Basic ' + (Buffer.from(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString('base64'))
-          },
-          form: {
-            grant_type: 'refresh_token',
-            refresh_token: user.refreshToken
-          },
-          json: true
-        }
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findByPk(id)
 
-        // 請求新token
-        request.post(requestOptions, (err, res, body) => {
-          if (!err && res.statusCode === 200) {
-            const accessToken = body.access_token
-
-            spotifyApi.setAccessToken(accessToken)
-            // 更新資料庫
-            user.update({
-              accessToken
-            })
-              .then(user => done(null, user))
-              .catch(err => done(err))
-          }
+    // 若spotify的token超過期限(3600秒 = 3600000毫秒)，需更新
+    if (Date.now() - Date.parse(user.updatedAt) >= 3600000) {
+      // 請求新token，並更新資料庫
+      const requestOptions = {
+        method: 'post',
+        url: 'https://accounts.spotify.com/api/token',
+        headers: {
+          'Authorization': 'Basic ' + (Buffer.from(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString('base64')),
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: qs.stringify({
+          grant_type: 'refresh_token',
+          refresh_token: user.refreshToken
         })
-      } else {
-        return done(null, user)
       }
-    })
-    .catch(err => done(err))
+
+      user.accessToken = (await axios(requestOptions)).data.access_token
+      await user.save()
+    }
+
+    return done(null, user.toJSON())
+
+  } catch (err) {
+    done(err)
+  }
 })
 
 module.exports = passport
