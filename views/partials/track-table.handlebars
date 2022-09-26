@@ -1,0 +1,20 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">歌名</th>
+      <th scope="col">歌手/團體</th>
+      <th scope="col">專輯</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each tracks}}
+      <tr>
+        <th scope="row">{{this.index}}</th>
+        <td>{{this.name}}</td>
+        <td>{{this.artist}}</td>
+        <td>{{this.album}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

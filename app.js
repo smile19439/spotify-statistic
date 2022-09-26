@@ -17,6 +17,7 @@ app.engine('handlebars', exphbs.engine({ defaultLayout: 'main', helpers: handleb
 app.set('view engine', 'handlebars')
 
 app.use(express.static('public'))
+app.use(express.urlencoded({ extended: true }))
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -25,6 +26,11 @@ app.use(session({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
+
+app.use((req, res, next) => {
+  res.locals.loginUser = req.user
+  next()
+})
 
 app.use(routes)
 

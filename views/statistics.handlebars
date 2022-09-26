@@ -1,6 +1,15 @@
 <div class="d-flex mb-2 align-items-center">
   <img src="{{checkAvatar user.avatar}}" class="rounded-circle border" style="width: 10%;">
-  <h3 class="mx-3">{{user.name}}</h3>
+  <div class="ms-3">
+    <h3>{{user.name}}</h3>
+    {{#ifCond user.spotifyId loginUser.spotifyId}}
+    <a href="/user/{{../loginUser.spotifyId}}/playlist">
+      <button class="btn btn-outline-success">
+        我的點歌本
+      </button>
+    </a>
+    {{/ifCond}}
+  </div>
 </div>
 
 <div>
@@ -19,24 +28,5 @@
     </div>
   </nav>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">歌名</th>
-        <th scope="col">歌手/團體</th>
-        <th scope="col">專輯</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each topTracks}}
-        <tr>
-          <th scope="row">{{this.index}}</th>
-          <td>{{this.name}}</td>
-          <td>{{this.artist}}</td>
-          <td>{{this.album}}</td>
-        </tr>
-      {{/each}}
-    </tbody>
-  </table>
+  {{> track-table tracks = topTracks}}
 </div>

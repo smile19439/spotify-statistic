@@ -16,7 +16,7 @@ passport.use(new spotifyStrategy(
   (accessToken, refreshToken, expires_in, profile, done) => {
     const spotifyId = profile.id
     const name = profile.displayName
-    const avatar = profile.photos[1]?.url
+    const avatar = profile.photos[1]?.url || null
 
     User.findOne({
       where: { spotifyId }

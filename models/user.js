@@ -17,8 +17,9 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     avatar: DataTypes.STRING,
     spotifyId: DataTypes.STRING,
-    accessToken: DataTypes.STRING,
-    refreshToken: DataTypes.STRING
+    accessToken: DataTypes.TEXT,
+    refreshToken: DataTypes.STRING,
+    playlist: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'User',

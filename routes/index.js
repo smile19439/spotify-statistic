@@ -14,7 +14,9 @@ const spotifyController = require('../controllers/spotify-controller')
 // auth
 router.get('/auth/spotify', passport.authenticate('spotify', {
   scope: [
-    'user-top-read'
+    'user-top-read',
+    'playlist-modify-private',
+    'playlist-modify-public'
   ]
 }))
 router.get('/auth/spotify/callback', passport.authenticate('spotify', {
