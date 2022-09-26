@@ -1,7 +1,12 @@
 {{#if loginUser.playlist}}
-  <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal-playlist">
-    變更點歌本
-  </button>
+  <div class="d-flex justify-content-between mb-2">
+    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal-playlist">
+      變更點歌本
+    </button>
+    <form action="/user/{{loginUser.spotifyId}}/playlist?_method=delete" method="post">
+      <button type="submit" class="btn btn-outline-danger">關閉點歌本</button>
+    </form>
+  </div>
 {{else}}
   <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal-playlist">
     建立點歌本

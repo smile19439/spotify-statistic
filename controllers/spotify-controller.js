@@ -103,6 +103,23 @@ const spotifyController = {
     } catch (err) {
       next(err)
     }
+  },
+  deletePlaylist: async (req, res, next) => {
+    try {
+      const { userId } = req.params
+
+      if (userId !== req.user.spotifyId) throw new Error('只能關閉自己的點歌本喔!')
+
+      await User.update(
+        { playlist: null },
+        { where: { spotifyId: userId } }
+      )
+
+      res.redirect(`/user/${req.user.spotifyId}/playlist`)
+
+    } catch (err) {
+      next(err)
+    }
   }
 }
 
