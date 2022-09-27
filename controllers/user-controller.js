@@ -6,7 +6,7 @@ const { User } = require('../models')
 // helpers
 const { getSpotifyApiOptions, getPlaylistTracks } = require('../helpers/spotify-helper')
 
-const spotifyController = {
+const userController = {
   getHome: (req, res, next) => {
     res.render('home')
   },
@@ -124,4 +124,4 @@ const spotifyController = {
   }
 }
 
-module.exports = spotifyController
+module.exports = userController

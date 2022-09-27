@@ -10,7 +10,7 @@ const user = require('./modules/user')
 const playlist = require('./modules/playlist')
 
 // controllers
-const spotifyController = require('../controllers/spotify-controller')
+const userController = require('../controllers/user-controller')
 
 // auth
 router.get('/auth/spotify', passport.authenticate('spotify', {
@@ -23,7 +23,7 @@ router.get('/auth/spotify', passport.authenticate('spotify', {
 router.get('/auth/spotify/callback', passport.authenticate('spotify', {
   failureFlash: true,
   failureRedirect: '/'
-}), spotifyController.signIn)
+}), userController.signIn)
 
 // user
 router.use('/user', authenticated, user)
@@ -32,6 +32,6 @@ router.use('/user', authenticated, user)
 router.use('/playlist', playlist)
 
 // home page
-router.get('/', spotifyController.getHome)
+router.get('/', userController.getHome)
 
 module.exports = router

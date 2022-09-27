@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
 
-const spotifyController = require('../../controllers/spotify-controller')
+const userController = require('../../controllers/user-controller')
 
-router.get('/:userId/statistics', spotifyController.getStatistic)
-router.get('/:userId/playlist', spotifyController.getPlaylist)
-router.post('/:userId/playlist', spotifyController.postPlaylist)
-router.delete('/:userId/playlist', spotifyController.deletePlaylist)
+router.get('/:userId/statistics', userController.getStatistic)
+router.get('/:userId/playlist', userController.getPlaylist)
+router.post('/:userId/playlist', userController.postPlaylist)
+router.delete('/:userId/playlist', userController.deletePlaylist)
 
 module.exports = router
