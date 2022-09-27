@@ -33,7 +33,7 @@ const spotifyController = {
           album: track.album.name
         }))
 
-      res.render('statistics', { user, topTracks, time_range })
+      res.render('users/statistics', { user, topTracks, time_range })
 
     } catch (err) {
       next(err)
@@ -64,8 +64,9 @@ const spotifyController = {
 
       // 取得點歌本歌曲內容
       const tracks = await getPlaylistTracks(req.user.playlist, req.user.accessToken)
+      const playlistUrl = `http://${process.env.DOMAIN_NAME}/playlist/${req.user.playlist}`
 
-      res.render('playlist', { playlists, tracks })
+      res.render('users/playlist', { playlists, tracks, playlistUrl })
 
     } catch (err) {
       next(err)
