@@ -7,12 +7,8 @@
 
   <div class="col-6">
     <form id="search-form" class="row">
-      <div class="col-3">
-        <select class="form-select" id="search-select">
-          <option value="track">依歌名</option>
-          <option value="artist">依歌手/團體</option>
-          <option value="album">依專輯</option>
-        </select>
+      <div class="col-auto">
+        <label for="search-input">請輸入關鍵字：</label>
       </div>
       <div class="col-7">
         <input type="text" class="form-control" id="search-input">
@@ -23,6 +19,6 @@
     </form>
 
     {{!-- 搜尋結果 --}}
-    <ul id=""></ul>
+    <form action="/playlist/{{user.playlist}}" method="post" id="search-result" style="display: none;"></form>
   </div>
 </div>
