@@ -24,6 +24,39 @@ const playlistController = {
       next(err)
     }
   },
+  postToPlaylist: async (req, res, next) => {
+    try {
+      const { playlistId } = req.params
+      const { track } = req.body
+
+      if (!track) throw new Error('未勾選歌曲！')
+
+      let uris
+      // 使用者勾選單項會傳入string
+      if (typeof track === 'string') {
+        uris = `spotify:track:${track}`
+      } else {
+        uris = track.reduce((acc, cur) => acc += `,spotify:track:${cur}`, '').slice(1)
+      }
+
+      const user = await User.findOne({
+        where: { playlist: playlistId },
+        raw: true,
+        nest: true
+      })
+
+      // 將歌曲加入spotify播放清單
+      const requestOption = getSpotifyApiOptions(`playlists/${playlistId}/tracks?uris=${uris}`, user.accessToken)
+      requestOption.method = 'post'
+
+      await axios(requestOption)
+
+      res.redirect(`/playlist/${playlistId}`)
+
+    } catch (err) {
+      next(err)
+    }
+  },
   searchTrack: async (req, res, next) => {
     try {
       const { playlistId, q } = req.query
