@@ -5,6 +5,7 @@ const { User } = require('../models')
 
 // helpers
 const { getSpotifyApiOptions, getPlaylistTracks } = require('../helpers/spotify-helper')
+const { getOffset, getPagination } = require('../helpers/pagination-helper')
 
 const userController = {
   getHome: (req, res, next) => {
@@ -42,9 +43,11 @@ const userController = {
   getPlaylist: async (req, res, next) => {
     try {
       const { userId } = req.params
+      const { page } = req.query
 
       if (userId !== req.user.spotifyId) throw new Error('只能管理自己的點歌本喔！')
-
+      if (page && (page < 1 || Number(page) !== Math.floor(page))) throw new Error('請勿輸入非正常頁數數字！')
+      
       // 取得使用者在spotify的播放清單
       const requestOptions = getSpotifyApiOptions(`users/${req.user.spotifyId}/playlists`, req.user.accessToken)
       const playlists = (await axios(requestOptions)).data.items
@@ -63,10 +66,13 @@ const userController = {
       }
 
       // 取得點歌本歌曲內容
-      const tracks = await getPlaylistTracks(req.user.playlist, req.user.accessToken)
+      const offset = getOffset(100, page)
+      const { total, tracks } = await getPlaylistTracks(req.user.playlist, req.user.accessToken, offset)
+      const pagination = getPagination(total, 100, page)
+
       const playlistUrl = `http://${process.env.DOMAIN_NAME}/playlist/${req.user.playlist}`
 
-      res.render('users/playlist', { playlists, tracks, playlistUrl })
+      res.render('users/playlist', { playlists, tracks, playlistUrl, pagination })
 
     } catch (err) {
       next(err)

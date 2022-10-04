@@ -7,15 +7,21 @@ const getSpotifyApiOptions = (path, token) => ({
   }
 })
 
-const getPlaylistTracks = async (id, token) => {
+const getPlaylistTracks = async (id, token, offset = 0) => {
   if (!id) return null
-  return (await axios(getSpotifyApiOptions(`playlists/${id}/tracks`, token))).data.items
+
+  const requestOption = getSpotifyApiOptions(`playlists/${id}/tracks?offset=${offset}`, token)
+  const results = (await axios(requestOption)).data
+  const total = results.total
+  const tracks = results.items
     .map((item, i) => ({
-      index: i + 1,
+      index: offset + i + 1,
       name: item.track.name,
       artist: item.track.artists.reduce((acc, cur) => acc + `,${cur.name}`, '').slice(1),
       album: item.track.album.name
     }))
+
+  return { total, tracks }
 }
 
 module.exports = {

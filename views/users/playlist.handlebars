@@ -15,7 +15,11 @@
   </button>
 {{/if}}
 
-{{> track-table}}
+<div style="height: 70vh; overflow-y: scroll; margin: 20px auto;">
+  {{> track-table}}
+</div>
+
+{{> pagination}}
 
 <!-- 點歌本Modal -->
 <div class="modal fade" id="modal-playlist" tabindex="-1" aria-labelledby="modal-playlist-title" aria-hidden="true">
