@@ -16,6 +16,7 @@ const getPlaylistTracks = async (id, token, offset = 0) => {
   const tracks = results.items
     .map((item, i) => ({
       index: offset + i + 1,
+      id: item.track.id,
       name: item.track.name,
       artist: item.track.artists.reduce((acc, cur) => acc + `,${cur.name}`, '').slice(1),
       album: item.track.album.name

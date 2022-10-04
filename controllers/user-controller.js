@@ -47,7 +47,7 @@ const userController = {
 
       if (userId !== req.user.spotifyId) throw new Error('只能管理自己的點歌本喔！')
       if (page && (page < 1 || Number(page) !== Math.floor(page))) throw new Error('請勿輸入非正常頁數數字！')
-      
+
       // 取得使用者在spotify的播放清單
       const requestOptions = getSpotifyApiOptions(`users/${req.user.spotifyId}/playlists`, req.user.accessToken)
       const playlists = (await axios(requestOptions)).data.items
@@ -123,6 +123,32 @@ const userController = {
       )
 
       res.redirect(`/user/${req.user.spotifyId}/playlist`)
+
+    } catch (err) {
+      next(err)
+    }
+  },
+  deleteTrack: async (req, res, next) => {
+    try {
+      const { userId, trackId } = req.params
+      
+      if (userId !== req.user.spotifyId) throw new Error('只能刪除自己的點歌本內容喔！')
+
+      const user = await User.findOne({
+        where: { spotifyId: userId },
+        raw: true,
+        nest: true
+      })
+
+      const requestOption = getSpotifyApiOptions(`playlists/${user.playlist}/tracks`, req.user.accessToken)
+      requestOption.method = 'delete'
+      requestOption.data = {
+        'tracks': [{ 'uri': `spotify:track:${trackId}` }]
+      }
+
+      await axios(requestOption)
+
+      res.redirect('back')
 
     } catch (err) {
       next(err)
