@@ -23,6 +23,9 @@
     </form>
 
     {{!-- 搜尋結果 --}}
-    <form action="/playlist/{{user.playlist}}" method="post" id="search-result" style="display: none;"></form>
+    <div style="height: 72vh; overflow-y: scroll; margin: 2vh auto;">
+      <form action="/playlist/{{user.playlist}}" method="post" id="search-result" style="display: none;"></form>
+    </div>
+    <button type="submit" form="search-result" class="btn btn-outline-primary" style="position: relative; right: -90%;">確定</button>
   </div>
 </div>

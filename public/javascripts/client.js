@@ -31,12 +31,5 @@ searchForm?.addEventListener('submit', event => {
         `
         searchResult.appendChild(item)
       })
-
-      const submitButton = document.createElement('button')
-      submitButton.type = 'submit'
-      submitButton.className = 'btn btn-outline-primary'
-      submitButton.textContent = '確定'
-
-      searchResult.appendChild(submitButton)
     })
 })
