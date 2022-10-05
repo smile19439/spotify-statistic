@@ -26,6 +26,8 @@ router.get('/auth/spotify/callback', passport.authenticate('spotify', {
   failureRedirect: '/'
 }), userController.signIn)
 
+router.get('/logout', userController.logout)
+
 // user
 router.use('/user', authenticated, user)
 

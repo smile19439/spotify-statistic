@@ -131,7 +131,7 @@ const userController = {
   deleteTrack: async (req, res, next) => {
     try {
       const { userId, trackId } = req.params
-      
+
       if (userId !== req.user.spotifyId) throw new Error('只能刪除自己的點歌本內容喔！')
 
       const user = await User.findOne({
@@ -153,6 +153,12 @@ const userController = {
     } catch (err) {
       next(err)
     }
+  },
+  logout: (req, res, next) => {
+    req.logout(err => {
+      if (err) return next(err)
+      res.redirect('/')
+    })
   }
 }
 
