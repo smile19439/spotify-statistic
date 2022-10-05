@@ -31,6 +31,7 @@ app.use(passport.session())
 
 app.use((req, res, next) => {
   res.locals.loginUser = req.user
+  res.locals.path = req.path.slice(1).split('/')
   next()
 })
 

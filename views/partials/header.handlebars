@@ -1,0 +1,21 @@
+<header>
+  <nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link {{#ifCond path.[0] ''}}active{{/ifCond}}" aria-current="page" href="/">首頁</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{#ifCond path.[2] 'statistics'}}active{{/ifCond}}"
+              href="/user/{{loginUser.spotifyId}}/statistics?time_range=short_term">排行榜</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{#ifCond path.[2] 'playlist'}}active{{/ifCond}}"
+              href="/user/{{loginUser.spotifyId}}/playlist">點歌本</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

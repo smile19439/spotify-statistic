@@ -12,6 +12,10 @@
 </head>
 
 <body>
+  {{#if loginUser}}
+    {{> header}}
+  {{/if}}
+  
   <div class="container mt-2">
     {{{body}}}
   </div>
