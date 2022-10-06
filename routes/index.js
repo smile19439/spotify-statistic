@@ -4,6 +4,7 @@ const passport = require('passport')
 
 // middlewares
 const { authenticated } = require('../middlewares/auth')
+const { generateErrorHandler } = require('../middlewares/error-handler')
 
 // routes
 const user = require('./modules/user')
@@ -39,5 +40,8 @@ router.get('/search', playlistController.searchTrack)
 
 // home page
 router.get('/', userController.getHome)
+
+// err handler
+router.use('/', generateErrorHandler)
 
 module.exports = router

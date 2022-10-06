@@ -105,6 +105,7 @@ const userController = {
         )
       }
 
+      req.flash('success_msg', '點歌本建立成功！')
       res.redirect(`/user/${req.user.spotifyId}/playlist`)
 
     } catch (err) {
@@ -122,6 +123,7 @@ const userController = {
         { where: { spotifyId: userId } }
       )
 
+      req.flash('success_msg', '點歌本已關閉！')
       res.redirect(`/user/${req.user.spotifyId}/playlist`)
 
     } catch (err) {
@@ -148,6 +150,7 @@ const userController = {
 
       await axios(requestOption)
 
+      req.flash('success_msg', '已刪除歌曲！')
       res.redirect('back')
 
     } catch (err) {
@@ -157,6 +160,7 @@ const userController = {
   logout: (req, res, next) => {
     req.logout(err => {
       if (err) return next(err)
+      req.flash('success_msg', '已成功登出！')
       res.redirect('/')
     })
   }

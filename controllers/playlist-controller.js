@@ -57,6 +57,7 @@ const playlistController = {
 
       await axios(requestOption)
 
+      req.flash('success_msg', '成功加入歌單！')
       res.redirect(`/playlist/${playlistId}`)
 
     } catch (err) {
