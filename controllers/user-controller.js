@@ -65,6 +65,9 @@ const userController = {
         )
       }
 
+      // 若無點歌本，可直接給res
+      if (!req.user.playlist) return res.render('users/playlist', { playlists })
+
       // 取得點歌本歌曲內容
       const offset = getOffset(100, page)
       const { total, tracks } = await getPlaylistTracks(req.user.playlist, req.user.accessToken, offset)
