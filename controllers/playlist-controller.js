@@ -52,10 +52,10 @@ const playlistController = {
       })
 
       // 將歌曲加入spotify播放清單
-      const requestOption = getSpotifyApiOptions(`playlists/${playlistId}/tracks?uris=${uris}`, user.accessToken)
-      requestOption.method = 'post'
+      const axiosOption = getSpotifyApiOptions(`playlists/${playlistId}/tracks?uris=${uris}`, user.accessToken)
+      axiosOption.method = 'post'
 
-      await axios(requestOption)
+      await axios(axiosOption)
 
       req.flash('success_msg', '成功加入歌單！')
       res.redirect(`/playlist/${playlistId}`)
@@ -73,8 +73,8 @@ const playlistController = {
         nest: true
       })
 
-      const requestOption = await getSpotifyApiOptions(`search?q=${encodeURI(q)}&type=track`, user.accessToken)
-      const results = (await axios(requestOption)).data.tracks.items.map(item => ({
+      const axiosOption = await getSpotifyApiOptions(`search?q=${encodeURI(q)}&type=track`, user.accessToken)
+      const results = (await axios(axiosOption)).data.tracks.items.map(item => ({
         id: item.id,
         name: item.name,
         artist: item.artists.reduce((acc, cur) => acc + `,${cur.name}`, '').slice(1),

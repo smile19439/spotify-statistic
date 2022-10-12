@@ -55,7 +55,7 @@ passport.deserializeUser(async (id, done) => {
     // 若spotify的token超過期限(3600秒 = 3600000毫秒)，需更新
     if (Date.now() - Date.parse(user.updatedAt) >= 3600000) {
       // 請求新token，並更新資料庫
-      const requestOptions = {
+      const axiosOptions = {
         method: 'post',
         url: 'https://accounts.spotify.com/api/token',
         headers: {
@@ -68,7 +68,7 @@ passport.deserializeUser(async (id, done) => {
         })
       }
 
-      user.accessToken = (await axios(requestOptions)).data.access_token
+      user.accessToken = (await axios(axiosOptions)).data.access_token
       await user.save()
     }
 

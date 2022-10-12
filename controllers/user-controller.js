@@ -25,8 +25,8 @@ const userController = {
         nest: true
       })
 
-      const requestOptions = getSpotifyApiOptions(`me/top/tracks?limit=10&time_range=${time_range}`, user.accessToken)
-      const topTracks = (await axios(requestOptions)).data.items
+      const axiosOptions = getSpotifyApiOptions(`me/top/tracks?limit=10&time_range=${time_range}`, user.accessToken)
+      const topTracks = (await axios(axiosOptions)).data.items
         .map((track, i) => ({
           index: i + 1,
           name: track.name,
@@ -49,8 +49,8 @@ const userController = {
       if (page && (page < 1 || Number(page) !== Math.floor(page))) throw new Error('請勿輸入非正常頁數數字！')
 
       // 取得使用者在spotify的播放清單
-      const requestOptions = getSpotifyApiOptions(`users/${req.user.spotifyId}/playlists`, req.user.accessToken)
-      const playlists = (await axios(requestOptions)).data.items
+      const axiosOptions = getSpotifyApiOptions(`users/${req.user.spotifyId}/playlists`, req.user.accessToken)
+      const playlists = (await axios(axiosOptions)).data.items
         .map(playlist => ({
           id: playlist.id,
           name: playlist.name,
@@ -90,11 +90,11 @@ const userController = {
 
       if (!playlist) {
         // 在spotify建立新播放清單
-        const requestOptions = getSpotifyApiOptions(`users/${userId}/playlists`, req.user.accessToken)
-        requestOptions.method = 'post'
-        requestOptions.data = { name }
+        const axiosOptions = getSpotifyApiOptions(`users/${userId}/playlists`, req.user.accessToken)
+        axiosOptions.method = 'post'
+        axiosOptions.data = { name }
 
-        const newPlaylist = (await axios(requestOptions)).data
+        const newPlaylist = (await axios(axiosOptions)).data
 
         await User.update(
           { playlist: newPlaylist.id },
@@ -145,13 +145,13 @@ const userController = {
         nest: true
       })
 
-      const requestOption = getSpotifyApiOptions(`playlists/${user.playlist}/tracks`, req.user.accessToken)
-      requestOption.method = 'delete'
-      requestOption.data = {
+      const axiosOption = getSpotifyApiOptions(`playlists/${user.playlist}/tracks`, req.user.accessToken)
+      axiosOption.method = 'delete'
+      axiosOption.data = {
         'tracks': [{ 'uri': `spotify:track:${trackId}` }]
       }
 
-      await axios(requestOption)
+      await axios(axiosOption)
 
       req.flash('success_msg', '已刪除歌曲！')
       res.redirect('back')

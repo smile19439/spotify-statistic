@@ -10,8 +10,8 @@ const getSpotifyApiOptions = (path, token) => ({
 const getPlaylistTracks = async (id, token, offset = 0) => {
   if (!id) return null
 
-  const requestOption = getSpotifyApiOptions(`playlists/${id}/tracks?offset=${offset}`, token)
-  const results = (await axios(requestOption)).data
+  const axiosOption = getSpotifyApiOptions(`playlists/${id}/tracks?offset=${offset}`, token)
+  const results = (await axios(axiosOption)).data
   const total = results.total
   const tracks = results.items
     .map((item, i) => ({
