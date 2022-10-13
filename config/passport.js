@@ -1,9 +1,9 @@
 const passport = require('passport')
 const spotifyStrategy = require('passport-spotify').Strategy
-const axios = require('axios').default
-const qs = require('qs')
 
 const { User } = require('../models')
+
+const { isTokenExpired, getNewAccessToken } = require('../helpers/spotify-helper')
 
 const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, DOMAIN_NAME } = process.env
 
@@ -52,23 +52,10 @@ passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findByPk(id)
 
-    // 若spotify的token超過期限(3600秒 = 3600000毫秒)，需更新
-    if (Date.now() - Date.parse(user.updatedAt) >= 3600000) {
+    // 若spotify的token超過期限，需更新
+    if (isTokenExpired(user.updatedAt)) {
       // 請求新token，並更新資料庫
-      const axiosOptions = {
-        method: 'post',
-        url: 'https://accounts.spotify.com/api/token',
-        headers: {
-          'Authorization': 'Basic ' + (Buffer.from(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString('base64')),
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        data: qs.stringify({
-          grant_type: 'refresh_token',
-          refresh_token: user.refreshToken
-        })
-      }
-
-      user.accessToken = (await axios(axiosOptions)).data.access_token
+      user.accessToken = await getNewAccessToken(user.refreshToken)
       await user.save()
     }
 

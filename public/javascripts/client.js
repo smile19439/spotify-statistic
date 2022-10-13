@@ -6,7 +6,7 @@ const searchResult = document.querySelector('#search-result')
 searchForm?.addEventListener('submit', event => {
   event.preventDefault()
   axios
-    .get(`/search?playlistId=${playlistId.value}&q=${searchInput.value}`)
+    .get(`/search?playlistId=${playlistId}&q=${searchInput.value}`)
     .then(res => {
       searchResult.style.display = 'block'
       searchResult.innerHTML = ''

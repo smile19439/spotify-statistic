@@ -1,4 +1,5 @@
 const axios = require('axios').default
+const qs = require('qs')
 
 const getSpotifyApiOptions = (path, token) => ({
   url: `https://api.spotify.com/v1/${path}`,
@@ -25,7 +26,30 @@ const getPlaylistTracks = async (id, token, offset = 0) => {
   return { total, tracks }
 }
 
+const isTokenExpired = updateTime => {
+  return Date.now() - Date.parse(updateTime) >= 3600000 //目前 Spotify token 期限為3600秒(3600000毫秒)
+}
+
+const getNewAccessToken = async refreshToken => {
+  const axiosOptions = {
+    method: 'post',
+    url: 'https://accounts.spotify.com/api/token',
+    headers: {
+      'Authorization': 'Basic ' + (Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64')),
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    data: qs.stringify({
+      grant_type: 'refresh_token',
+      refresh_token: refreshToken
+    })
+  }
+
+  return (await axios(axiosOptions)).data.access_token
+}
+
 module.exports = {
   getSpotifyApiOptions,
-  getPlaylistTracks
+  getPlaylistTracks,
+  isTokenExpired,
+  getNewAccessToken
 }
