@@ -15,7 +15,7 @@ searchForm?.addEventListener('submit', event => {
         const item = document.createElement('div')
         item.className = 'd-flex my-1 border'
         item.innerHTML = `
-          <input type="checkbox" id="${data.id}" name="track" value="${data.id}" class="form-check-input ms-1 mt-auto mb-auto">
+          <input type="checkbox" id="${data.id}" name="track" value="${data.uri}" class="form-check-input ms-1 mt-auto mb-auto">
           <label for="${data.id}" class="d-flex w-100">
             <div style="width: 10%; margin: auto 1%;">
               <img src="${data.albumImage}" style="width: 95%;">

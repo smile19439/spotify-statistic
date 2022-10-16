@@ -148,7 +148,7 @@ const userController = {
       const axiosOption = getSpotifyApiOptions(`playlists/${user.playlist}/tracks`, req.user.accessToken)
       axiosOption.method = 'delete'
       axiosOption.data = {
-        'tracks': [{ 'uri': `spotify:track:${trackId}` }]
+        tracks: [{ uri: `spotify:track:${trackId}` }]
       }
 
       await axios(axiosOption)

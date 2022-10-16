@@ -23,7 +23,7 @@ const playlistController = {
         user.accessToken = await getNewAccessToken(user.refreshToken)
         await user.save()
       }
-      
+
       user = user.toJSON()
 
       const offset = getOffset(100, page)
@@ -43,14 +43,6 @@ const playlistController = {
 
       if (!track) throw new Error('未勾選歌曲！')
 
-      let uris
-      // 使用者勾選單項會傳入string
-      if (typeof track === 'string') {
-        uris = `spotify:track:${track}`
-      } else {
-        uris = track.reduce((acc, cur) => acc += `,spotify:track:${cur}`, '').slice(1)
-      }
-
       let user = await User.findOne({
         where: { playlist: playlistId }
       })
@@ -64,8 +56,15 @@ const playlistController = {
       user = user.toJSON()
 
       // 將歌曲加入spotify播放清單
-      const axiosOption = getSpotifyApiOptions(`playlists/${playlistId}/tracks?uris=${uris}`, user.accessToken)
+      const axiosOption = getSpotifyApiOptions(`playlists/${playlistId}/tracks`, user.accessToken)
       axiosOption.method = 'post'
+
+      // 使用者勾選單項會傳入string
+      if (typeof track === 'string') {
+        axiosOption.data = { uris: [track] }
+      } else {
+        axiosOption.data = { uris: track }
+      }
 
       await axios(axiosOption)
 
@@ -94,6 +93,7 @@ const playlistController = {
       const axiosOption = await getSpotifyApiOptions(`search?q=${encodeURI(q)}&type=track`, user.accessToken)
       const results = (await axios(axiosOption)).data.tracks.items.map(item => ({
         id: item.id,
+        uri: item.uri,
         name: item.name,
         artist: item.artists.reduce((acc, cur) => acc + `,${cur.name}`, '').slice(1),
         album: item.album.name,
