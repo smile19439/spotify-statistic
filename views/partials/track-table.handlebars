@@ -16,7 +16,10 @@
         <th scope="row">{{this.index}}</th>
         <td>{{this.name}}</td>
         <td>{{this.artist}}</td>
-        <td>{{this.album}}</td>
+        <td>
+          <img src="{{this.albumCover}}" class="me-1" style="width: 10%;">
+          {{this.album}}
+        </td>
         {{#ifCond ../route 'user-playlist'}}
           <td>
             <form action="/user/{{../../loginUser.spotifyId}}/playlist/{{../this.id}}?_method=delete" method="post">

@@ -20,7 +20,8 @@ const getPlaylistTracks = async (id, token, offset = 0) => {
       id: item.track.id,
       name: item.track.name,
       artist: item.track.artists.reduce((acc, cur) => acc + `,${cur.name}`, '').slice(1),
-      album: item.track.album.name
+      album: item.track.album.name,
+      albumCover: item.track.album.images[1]?.url
     }))
 
   return { total, tracks }

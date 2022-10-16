@@ -31,7 +31,8 @@ const userController = {
           index: i + 1,
           name: track.name,
           artist: track.artists.reduce((acc, cur) => acc + `,${cur.name}`, '').slice(1),
-          album: track.album.name
+          album: track.album.name,
+          albumCover: track.album.images[1]?.url
         }))
 
       res.render('users/statistics', { user, topTracks, time_range })
