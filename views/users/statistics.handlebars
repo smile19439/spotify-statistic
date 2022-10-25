@@ -1,5 +1,5 @@
 <div class="d-flex mb-2 align-items-center">
-  <img src="{{checkAvatar user.avatar}}" class="rounded-circle border" style="width: 10%;">
+  <img src="{{checkAvatar user.avatar}}" class="rounded-circle border" style="width: 7%;">
   <div class="ms-3">
     <h3>{{user.name}}</h3>
     {{#ifCond user.spotifyId loginUser.spotifyId}}
@@ -13,7 +13,7 @@
 </div>
 
 <div>
-  <nav class="navbar navbar-expand-lg bg-light">
+  <nav class="navbar navbar-expand-lg bg-light p-0">
     <div class="container-fluid">
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
@@ -22,7 +22,7 @@
           <a class="nav-link {{#ifCond time_range 'medium_term'}}active{{/ifCond}}"
             href="/user/{{user.spotifyId}}/statistics?time_range=medium_term">過去半年</a>
           <a class="nav-link {{#ifCond time_range 'long_term'}}active{{/ifCond}}"
-            href="/user/{{user.spotifyId}}/statistics?time_range=long_term">所有紀錄</a>
+            href="/user/{{user.spotifyId}}/statistics?time_range=long_term">長年紀錄</a>
         </div>
       </div>
     </div>
